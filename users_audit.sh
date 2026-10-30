@@ -12,7 +12,7 @@ fi
 protected() { echo "$1" | grep -Eq "^($PROTECTED_USERS)$"; }
 EXPECTED="root|$PROTECTED_USERS|scrutineer|techdirector|crewchief|firecrew|jackcrew|garagecrew|celebrity|pitlaner|reserve|gunners"
 
-echo "== UID 0 accounts (expect root; leave whiteteam alone if it appears) =="
+echo "== UID 0 accounts =="
 awk -F: '$3==0{print $1}' /etc/passwd
 
 echo "== Empty passwords =="
@@ -22,13 +22,13 @@ echo "== Login-shell users (out-of-scope ones marked) =="
 awk -F: '$7 !~ /(nologin|false|sync|shutdown|halt)$/ {print $1":"$3":"$7}' /etc/passwd \
   | sed -E "s/^($PROTECTED_USERS):/[LEAVE ALONE] &/"
 
-echo "== Login users NOT in the packet's user list (investigate before touching) =="
+echo "== Login users NOT in the packet's user list =="
 awk -F: '$7 !~ /(nologin|false|sync|shutdown|halt)$/ {print $1}' /etc/passwd | grep -Ev "^($EXPECTED)$"
 
 echo "== Admin / docker group members =="
 getent group "$ADMIN_GRP" docker
 
-echo "== sudoers rules (whiteteam hidden) =="
+echo "== sudoers rules [hide whiteteam] =="
 grep -rEv '^\s*(#|$)' /etc/sudoers /etc/sudoers.d/ 2>/dev/null | grep -v whiteteam | grep -Ei 'nopasswd|ALL='
 
 echo "== authorized_keys files (whiteteam / datadog hidden) =="
