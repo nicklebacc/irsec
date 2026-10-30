@@ -12,11 +12,7 @@ esac
 
 # Team number X from our own IP (10.X.1.x on LAN boxes, 192.168.X.x on cloud boxes).
 # Docker bridges are skipped (they also use 192.168.x.x). Override with: TEAM=7 ./script.sh
-if [ -z "$TEAM" ]; then
-  TEAM=$(ip -4 -o addr show scope global | awk '$2 !~ /^(docker|br-|veth)/ {print $4}' \
-    | sed -nE 's#^10\.([0-9]+)\.1\.[0-9]+/.*#\1#p; s#^192\.168\.([0-9]+)\.[0-9]+/.*#\1#p' | head -1)
-fi
-[ -n "$TEAM" ] || { echo "Cannot detect team number. Run: TEAM=<n> $0"; exit 1; }
+readonly TEAM=14
 
 # ---- OUT OF SCOPE: never block, modify, rotate, kill or delete ----
 MGMT_NET=172.16.1.0/24          # management network
