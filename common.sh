@@ -9,9 +9,6 @@ case "$ID" in
   rocky|rhel|centos|almalinux) FAM=rpm; SSH_SVC=sshd; ADMIN_GRP=wheel; NFT_MAIN=/etc/sysconfig/nftables.conf ;;
   *) echo "Unknown distro: $ID"; exit 1 ;;
 esac
-
-# Team number X from our own IP (10.X.1.x on LAN boxes, 192.168.X.x on cloud boxes).
-# Docker bridges are skipped (they also use 192.168.x.x). Override with: TEAM=7 ./script.sh
 readonly TEAM=14
 
 # ---- OUT OF SCOPE: never block, modify, rotate, kill or delete ----
